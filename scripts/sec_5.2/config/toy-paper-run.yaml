@@ -1,0 +1,100 @@
+default_parameters: &default_parameters
+    d_z: 2
+    kernel: 'norm_fixed_var_w_skip'
+    n_hidden: 512
+
+default_theta_lr: &default_theta_lr
+    lr: 1e-4
+
+
+experiment:
+    n_reruns: 10
+    n_updates: 15000
+    name: 'default'
+    compute_metrics: False
+    use_jit: True
+
+pvi:
+    algorithm: 'pvi'
+    model: 
+        use_particles: True
+        n_particles: 100
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_lr
+        optimizer: 'rmsprop'
+        lr_decay: False
+        regularization: 1e-8
+        clip: False
+    r_opt:
+        lr: 1e-2
+        regularization: 1e-8
+    extra_alg:
+
+gmm_pvi:
+    algorithm: 'gmm_pvi'
+    model: 
+        use_particles: True
+        n_particles: 100
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_lr
+        optimizer: 'rmsprop'
+        lr_decay: False
+        regularization: 1e-8
+        clip: False
+    r_opt:
+        lr: 1e-2
+        regularization: 1e-8
+    extra_alg:
+
+svi:
+    algorithm: 'svi'
+    model:
+        use_particles: False
+        <<: *default_parameters
+    dual:
+        n_hidden: 512
+    theta_opt:
+        <<: *default_theta_lr
+        optimizer: 'rmsprop'
+        lr_decay: False
+        regularization: 1e-8
+        clip: False
+    extra_alg:
+
+uvi:
+    algorithm: 'uvi'
+    model:
+        use_particles: False
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_lr
+        optimizer: 'rmsprop'
+        lr_decay: False
+        regularization: 1e-8
+        clip: False
+    extra_alg:
+
+sm:
+    algorithm: 'sm'
+    model:
+        use_particles: False
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_lr
+        optimizer: 'rmsprop'
+        lr_decay: True
+        min_lr: 1e-5
+        regularization: 1e-8
+        clip: False
+    dual:
+        n_hidden: 512
+    dual_opt:
+        lr: 1e-3
+        min_lr: 1e-5
+        regularization: 1e-8
+        optimizer: 'rmsprop'
+        lr_decay: True
+        clip: False
+    extra_alg:

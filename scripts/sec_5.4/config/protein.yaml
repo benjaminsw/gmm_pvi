@@ -1,0 +1,82 @@
+default_parameters: &default_parameters
+    d_z: 10
+    kernel: 'norm_var_lskip'
+    n_hidden: 512
+
+default_theta_parameters: &default_theta_parameters
+    lr: 1e-3
+    lr_decay: True
+    interval: 100
+    min_lr: 1e-5
+    clip: False
+
+experiment:
+    n_subsample: 100
+    n_updates: 1000
+    n_reruns: 10
+    problem_name: 'protein'
+    use_jit: True
+    seed: 2
+
+
+pvi:
+    algorithm: 'pvi'
+    model:
+        use_particles: True
+        n_particles: 100
+        <<: *default_parameters
+    theta_opt: 
+        <<: *default_theta_parameters
+        optimizer: 'rmsprop'
+    r_opt:
+        lr: 1e-1
+        regularization: 1e-3
+    r_precon:
+        type: 'rms'
+        max_norm: 1.
+        agg: 'mean'
+    extra_alg:
+
+
+uvi:
+    algorithm: 'uvi'
+    model:
+        use_particles: False
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_parameters
+        optimizer: 'rmsprop'
+    extra_alg:
+
+
+svi:
+    algorithm: 'svi'
+    model:
+        use_particles: False
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_parameters
+        optimizer: 'rmsprop'
+    extra_alg:
+
+
+sm:
+    algorithm: 'sm'
+    model:
+        use_particles: False
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_parameters
+        optimizer: 'rmsprop'
+    dual:
+        n_hidden: 512
+    dual_opt:
+        optimizer: 'rmsprop'
+        lr: 1e-2
+        lr_decay: True
+        min_lr: 1e-4
+        interval: 100
+        clip: True
+        max_clip: 1.
+        regularization: 1e-3 
+    extra_alg:

@@ -1,0 +1,33 @@
+default_parameters: &default_parameters
+    d_z: 2
+    kernel: 'norm_fixed_var_w_skip'
+    n_hidden: 128
+
+default_theta_lr: &default_theta_lr
+    lr: 1e-4
+
+
+experiment:
+    n_reruns: 1
+    n_updates: 1000
+    name: 'skip'
+    compute_metrics: False
+    use_jit: True
+    run_zero: True
+
+pvi:
+    algorithm: 'pvi'
+    model: 
+        use_particles: True
+        n_particles: 100
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_lr
+        optimizer: 'rmsprop'
+        lr_decay: False
+        regularization: 1e-8
+        clip: False
+    r_opt:
+        lr: 1e-2
+        regularization: 1e-8
+    extra_alg:

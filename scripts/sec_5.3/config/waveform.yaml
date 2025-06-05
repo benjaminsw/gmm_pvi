@@ -1,0 +1,77 @@
+default_parameters: &default_parameters
+    d_z: 10
+    kernel: 'FixedFullNormCond'
+    n_hidden: 512
+
+
+default_theta_parameters: &default_theta_parameters
+    lr: 1e-3
+    lr_decay: False
+    clip: False
+
+
+experiment:
+    n_subsample: 400
+    n_updates: 20000
+    n_reruns: 1
+    problem_name: 'waveform'
+    use_jit: True
+    seed: 2
+
+
+pvi:
+    algorithm: 'pvi'
+    model:
+        use_particles: True
+        n_particles: 100
+        <<: *default_parameters
+    theta_opt: 
+        <<: *default_theta_parameters
+        optimizer: 'rmsprop'
+    r_opt:
+        lr: 1e-2
+        regularization: 1e-8
+    r_precon:
+        type: 'rms'
+        max_norm: 1.
+        agg: 'mean'
+    extra_alg:
+
+
+uvi:
+    algorithm: 'uvi'
+    model:
+        use_particles: False
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_parameters
+        optimizer: 'rmsprop'
+    extra_alg:
+
+
+svi:
+    algorithm: 'svi'
+    model:
+        use_particles: False
+        <<: *default_parameters
+    theta_opt:
+        <<: *default_theta_parameters
+        optimizer: 'rmsprop'
+    extra_alg:
+
+
+sm:
+    algorithm: 'sm'
+    model:
+        use_particles: False
+        <<: *default_parameters
+        n_hidden: 100
+    theta_opt:
+        lr: 1e-3
+        optimizer: 'adam'
+    dual:
+        n_hidden: 256
+    dual_opt:
+        lr: 3e-3
+        optimizer: 'adam'
+    extra_alg:

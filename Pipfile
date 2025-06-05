@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+tqdm = "*"
+typer = "*"
+jax = {extras = ["cuda12"], version = "*"}
+jaxtyping = "*"
+optax = "*"
+equinox = "*"
+matplotlib = "*"
+pyyaml = "*"
+scikit-learn = "*"
+pandas = "*"
+wandb = "*"
+pot = "*"
+mmdfuse = {git = "git+https://github.com/antoninschrab/mmdfuse.git"}
+xlrd = "*"
+jupyter = "*"
+seaborn = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
